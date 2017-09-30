@@ -11,7 +11,7 @@ class Request {
     private $resource;
     private $operation;
     private $rv;
-    private $arrayOperations = Array('POST/' => 'register', 'PUT/' => 'update', 'PUT/delete' => 'delete', 'GET/' => 'search');
+    private $arrayOperations = Array('POST/' => 'register', 'PUT/' => 'update', 'PUT/delete' => 'disable', 'GET/' => 'search');
 
     public function __construct($method, $protocol, $host, $uri = null, $queryString = null, $body = null) {
         //Cria uma instância da classe requestValidador e joga na variável $rv
