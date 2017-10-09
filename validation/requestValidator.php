@@ -124,13 +124,7 @@ class RequestValidator implements IRequestValidator {
 
 //2 - Validar corpo do Products
     private function isProductsBodyValid($body) {
-        if (!$this->validBodyAttributes('products', $body))
-            return false;
-
-        if (!$this->isSectionsBodyValid($body['section']))
-            return false;
-
-        if (!$this->isProvidersBodyValid($body['provider']))
+        if (!$this->validBodyAttributes('products', $body) || !$this->isSectionsBodyValid($body['section']) || !$this->isProvidersBodyValid($body['provider']))
             return false;
 
         return true;
@@ -146,10 +140,7 @@ class RequestValidator implements IRequestValidator {
 
 //4 - Validar corpo do Purchases
     private function isPurchasesBodyValid($body) {
-        if (!$this->validBodyAttributes('purchases', $body))
-            return false;
-
-        if (!$this->isProvidersBodyValid($body['provider']))
+        if (!$this->validBodyAttributes('purchases', $body) || !$this->isProvidersBodyValid($body['provider']))
             return false;
 
         foreach ($body['purchaseitems'] as $item) {
@@ -162,10 +153,7 @@ class RequestValidator implements IRequestValidator {
 
 //4.1 - Purchase items
     private function isItemsBodyValid($body) {
-        if (!$this->validBodyAttributes('items', $body))
-            return false;
-
-        if (!$this->isProductsBodyValid($body['product']))
+        if (!$this->validBodyAttributes('items', $body) || !$this->isProductsBodyValid($body['product']))
             return false;
 
         return true;
@@ -181,10 +169,7 @@ class RequestValidator implements IRequestValidator {
 
 //6 - Validar corpo do Sales
     private function isSalesBodyValid($body) {
-        if (!$this->validBodyAttributes('sales', $body))
-            return false;
-
-        if (!$this->isEmployeesBodyValid($body['cashier']))
+        if (!$this->validBodyAttributes('sales', $body) || !$this->isEmployeesBodyValid($body['cashier']))
             return false;
 
         foreach ($body['saleitems'] as $item) {
@@ -205,10 +190,7 @@ class RequestValidator implements IRequestValidator {
 
 //8 - Validar corpo do Users
     private function isUsersBodyValid($body) {
-        if (!$this->validBodyAttributes('users', $body))
-            return false;
-
-        if (!$this->isEmployeesBodyValid($body['employee']))
+        if (!$this->validBodyAttributes('users', $body) || !$this->isEmployeesBodyValid($body['employee']))
             return false;
 
         return true;
