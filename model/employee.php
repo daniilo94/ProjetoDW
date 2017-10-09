@@ -44,7 +44,7 @@ class Employee {
     }
 
     public function getPhones() {
-        return $this->phone;
+        return $this->phones;
     }
 
     public function setPhones($phones) {

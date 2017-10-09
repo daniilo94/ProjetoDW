@@ -17,41 +17,41 @@ class Purchase {
         $this->setProvider($provider);
     }
 
-    function getTimestamp() {
+    public function getTimestamp() {
         return $this->timestamp;
     }
 
-    function getPurchaseItems() {
+    public function getPurchaseItems() {
         return $this->purchaseItems;
     }
 
-    function getTotalPrice() {
+    public function getTotalPrice() {
         return $this->totalPrice;
     }
 
-    function getProvider() {
+    public function getProvider() {
         return $this->provider;
     }
 
-    function setTimestamp() {
+    private function setTimestamp() {
         $this->timestamp = (new DateTime)->getTimestamp();
     }
 
-    function setPurchaseItems($purchaseItems) {
+    private function setPurchaseItems($purchaseItems) {
         foreach ($purchaseItems as $item) {
             new Item('purchase', $item['product'], $item['quantity'], $item['totalvalue']);
         }
         $this->purchaseItems = $purchaseItems;
     }
 
-    function setTotalPrice($totalPrice) {
+    private function setTotalPrice($totalPrice) {
         if (!$this->pv->isTotalPriceValid($totalPrice, $this->purchaseItems))
             throw new RequestException("400", "Bad request");
 
         $this->totalPrice = $totalPrice;
     }
 
-    function setProvider($provider) {
+    private function setProvider($provider) {
         $this->provider = new Provider($provider['name'], $provider['cnpj'], $provider['phones'], $provider['email'], $provider['description']);
     }
 

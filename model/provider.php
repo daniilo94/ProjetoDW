@@ -27,8 +27,8 @@ class Provider {
         return $this->cnpj;
     }
 
-    public function getPhone() {
-        return $this->phone;
+    public function getPhones() {
+        return $this->phones;
     }
 
     public function getEmail() {

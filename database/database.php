@@ -33,7 +33,6 @@ class DBHandler {
 
     public function search($parameters, $collection, $options = []) {
         $conn = $this->getConnection();
-        var_dump($parameters);
         $query = new MongoDB\Driver\Query($parameters, $options);
         $rows = $conn->executeQuery("test." . $collection, $query);
         $result = Array();

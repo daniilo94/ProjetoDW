@@ -19,49 +19,49 @@ class Sale {
         $this->setCashier($cashier);
     }
 
-    function getTimestamp() {
+    public function getTimestamp() {
         return $this->timestamp;
     }
 
-    function getSaleItems() {
+    public function getSaleItems() {
         return $this->saleItems;
     }
 
-    function getTotalPrice() {
+    public function getTotalPrice() {
         return $this->totalPrice;
     }
 
-    function getFormOfPayment() {
+    public function getFormOfPayment() {
         return $this->formOfPayment;
     }
 
-    function getCashier() {
+    public function getCashier() {
         return $this->cashier;
     }
 
-    function setFormOfPayment($formOfPayment) {
+    private function setFormOfPayment($formOfPayment) {
         if (!$this->sv->isFormOfPaymentValid($formOfPayment))
             throw new RequestException("400", "Bad request");
 
         $this->formOfPayment = $formOfPayment;
     }
 
-    function setCashier($cashier) {
+    private function setCashier($cashier) {
         $this->cashier = new Employee($cashier['name'], $cashier['cpf'], $cashier['phones'], $cashier['email'], $cashier['birthdate'], $cashier['role']);
     }
 
-    function setTimestamp() {
+    private function setTimestamp() {
         $this->timestamp = (new DateTime)->getTimestamp();
     }
 
-    function setSaleItems($saleItems) {
+    private function setSaleItems($saleItems) {
         foreach ($saleItems as $item) {
             new Item('sale', $item['product'], $item['quantity'], $item['totalvalue']);
         }
         $this->saleItems = $saleItems;
     }
 
-    function setTotalPrice($totalPrice) {
+    private function setTotalPrice($totalPrice) {
         if (!$this->sv->isTotalPriceValid($totalPrice, $this->saleItems))
             throw new RequestException("400", "Bad request");
 

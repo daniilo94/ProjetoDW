@@ -17,31 +17,31 @@ class Item {
         $this->setTotalValue($totalValue);
     }
 
-    function getProduct() {
+    public function getProduct() {
         return $this->product;
     }
 
-    function getQuantity() {
+    public function getQuantity() {
         return $this->quantity;
     }
 
-    function getTotalValue() {
+    public function getTotalValue() {
         return $this->totalValue;
     }
 
-    function setProduct($product) {
+    private function setProduct($product) {
         $this->product = new Product($product['name'], $product['description'], $product['purchaseprice'], 
                 $product['saleprice'], $product['measure'], $product['section'], $product['provider'], $product['currentstock']);
     }
 
-    function setQuantity($quantity) {
+    private function setQuantity($quantity) {
         if (!$this->iv->isQuantityValid($quantity))
             throw new RequestException("400", "Bad request");
 
         $this->quantity = $quantity;
     }
 
-    function setTotalValue($totalValue) {
+    private function setTotalValue($totalValue) {
         $price = ($this->itemType == 'purchase') ? $this->product->getPurchasePrice() : $this->product->getSalePrice();
         
         if (!$this->iv->isTotalValueValid($totalValue, $this->quantity, $price))

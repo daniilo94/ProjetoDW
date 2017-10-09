@@ -32,10 +32,6 @@ class Request {
         return $this->method;
     }
 
-    public function getPath() {
-        return $this->path;
-    }
-
     public function getBody() {
         return $this->body;
     }
