@@ -130,6 +130,7 @@ class RequestValidator implements IRequestValidator
 //Products
     private function isProductsBodyValid($body)
     {
+        $validations = Array();
         $validations[] = ["products", $body];
         $validations[] = ["sections", $body['section']];
         $validations[] = ["providers", $body['provider']];
@@ -140,6 +141,7 @@ class RequestValidator implements IRequestValidator
     //Employees
     private function isEmployeesBodyValid($body)
     {
+        $validations = Array();
         $validations[] = ["employees", $body];
         $validations[] = ["roles", $body['role']];
 
@@ -155,6 +157,7 @@ class RequestValidator implements IRequestValidator
     //Items
     private function isItemsBodyValid($body)
     {
+        $validations = Array();
         $validations[] = ['items', $body];
         $validations[] = ["products", $body['product']];
         $validations[] = ["sections", $body['product']['section']];
@@ -180,6 +183,7 @@ class RequestValidator implements IRequestValidator
     //Users
     private function isUsersBodyValid($body)
     {
+        $validations = Array();
         $validations[] = ['users', $body];
         $validations[] = ['employees', $body['employee']];
 
@@ -189,6 +193,7 @@ class RequestValidator implements IRequestValidator
     //Purchases
     private function isPurchasesBodyValid($body)
     {
+        $validations = Array();
         $validations[] = ['purchases', $body];
         $validations[] = ['providers', $body['provider']];
         if (!$this->validBodyAttributes($validations))
@@ -204,6 +209,7 @@ class RequestValidator implements IRequestValidator
 
     private function isSalesBodyValid($body)
     {
+        $validations = Array();
         $validations[] = ['sales', $body];
         $validations[] = ['employees', $body['cashier']];
         if (!$this->validBodyAttributes($validations))
