@@ -27,9 +27,11 @@ class ProductController {
         $body = $this->request->getBody();
         $collection = $this->request->getResource();
         try {
-            new Product($body['name'], $body['description'], $body['purchasePrice'], $body['salePrice'], 
-                    $body['sectionId'], $body['providerId'], $body['stock']);
-            return (new DBHandler())->insert($body, $collection);
+            new Product($body['name'], $body['description'], $body['purchaseprice'], $body['saleprice'],
+                $body['measure'], $body['section'], $body['provider'], $body['currentstock']);
+            (new DBHandler())->insert($body, $collection);
+
+            return json_encode(Array('code' => '200', 'message' => 'Ok'));
         } catch (RequestException $ue) {
             return $ue->toJson();
         }

@@ -1,11 +1,6 @@
 <?php
 
-//require_once ("model/request.php");
-//require_once ("validation/requestValidator.php");
-//require_once ("controller/usercontroller.php");
-
-class RequestTreater
-{
+class RequestTreater {
 
     private $controllers = Array(
         "users" => "UserController",
@@ -16,8 +11,7 @@ class RequestTreater
         'saleitems' => 'SaleItemController', 'purchaseitems' => 'PurchaseItemController'
     );
 
-    public function start()
-    {
+    public function start(){
         try {
             //Tenta criar uma nova request
             $request = new Request($_SERVER['REQUEST_METHOD'],
@@ -38,23 +32,8 @@ class RequestTreater
             return $re->toJson();
         }
 
-
     }
 }
-
-/*
-{
-  "name": "joao",
-  "email": "joao@email.com",
-  "pass": "a",
-  "bdate": "01/01/2001"
-}
-*/
-
-
-
-
-
 
 
 

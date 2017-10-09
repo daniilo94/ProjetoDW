@@ -6,7 +6,6 @@
 
 class RoleController {
 
-//    private $allowedOperations = Array('info' => 'search', 'register' => 'create', 'update' => 'update', 'disable' => 'disable');
     private $request;
 
     public function __construct($request) {
@@ -28,7 +27,9 @@ class RoleController {
         $collection = $this->request->getResource();
         try {
             new Role($body['name'], $body['description'], $body['salary']);
-            return (new DBHandler())->insert($body, $collection);
+            (new DBHandler())->insert($body, $collection);
+
+            return json_encode(Array('code' => '200', 'message' => 'Ok'));
         } catch (RequestException $ue) {
             return $ue->toJson();
         }
@@ -47,7 +48,7 @@ class RoleController {
         return "função de atualizar";
     }
 
-    private function disable() {
+    private function delete() {
         return "função de desativar";
     }
 

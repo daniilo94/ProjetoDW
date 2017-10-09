@@ -1,11 +1,19 @@
 <?php
 
-class UserValidator {
+class UserValidator implements IUserValidator {
 
-public function isValidEmail($email) {
-	if(!filter_var($email,FILTER_VALIDATE_EMAIL))
-		return false;
-	return true;
-}
+    public function isUserTypeValid($userType){
+        if($userType != "normal" && $userType != "admin")
+            return false;
+
+        return true;
+    }
+
+    public function isPasswordValid($password){
+        if(strlen($password) < 7)
+            return false;
+
+        return true;
+    }
 
 }

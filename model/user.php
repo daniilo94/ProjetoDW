@@ -2,23 +2,26 @@
 
 class User {
 
-    private $employeeId;
+    private $employee;
     private $userType;
-    private $passWord;
+    private $password;
+    private $uv;
 
-    public function __construct($employeeId, $userType, $passWord) {
-        //$this->uv = new UserValidator();
-        $this->employeeId = $employeeId;
-        $this->userType = $userType;
-        $this->passWord = $passWord;
+    public function __construct($employee, $userType, $password) {
+        $this->uv = new UserValidator();
+
+        $this->setEmployee($employee);
+        $this->setUserType($userType);
+        $this->setPassword($password);
     }
 
-    public function getEmployeeId() {
-        return $this->employeeId;
+    public function getEmployee() {
+        return $this->employee;
     }
 
-    public function setEmployeeId($employeeId) {
-        $this->employeeId = $employeeId;
+    public function setEmployee($employee) {
+        $this->employee = new Employee($employee['name'], $employee['cpf'], $employee['phones'],
+            $employee['email'], $employee['birthdate'], $employee['role']);
     }
 
     public function getUserType() {
@@ -26,15 +29,21 @@ class User {
     }
 
     public function setUserType($userType) {
+        if (!$this->uv->isUserTypeValid($userType))
+            throw new RequestException("400", "Bad request");
+
         $this->userType = $userType;
     }
 
-    public function getPassWord() {
-        return $this->passWord;
+    public function getPassword() {
+        return $this->password;
     }
 
-    public function setPassWord($passWord) {
-        $this->passWord = $passWord;
+    public function setPassword($password) {
+        if (!$this->uv->isPasswordValid($password))
+            throw new RequestException("400", "Bad request");
+
+        $this->password = $password;
     }
 
 }

@@ -27,8 +27,11 @@ class SaleController {
         $body = $this->request->getBody();
         $collection = $this->request->getResource();
         try {
-            new Sale($body['timestamp'], $body['totalPrice'], $body['formOfPayment']);
-            return (new DBHandler())->insert($body, $collection);
+            $sale = new Sale($body['saleitems'], $body['totalprice'], $body['formofpayment'], $body['cashier']);
+            $body['timestamp'] = $sale->getTimestamp();
+            (new DBHandler())->insert($body, $collection);
+
+            return json_encode(Array('code' => '200', 'message' => 'Ok'));
         } catch (RequestException $ue) {
             return $ue->toJson();
         }

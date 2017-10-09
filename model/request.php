@@ -11,7 +11,7 @@ class Request {
     private $resource;
     private $operation;
     private $rv;
-    private $arrayOperations = Array('POST/' => 'register', 'PUT/' => 'update', 'PUT/delete' => 'disable', 'GET/' => 'search');
+    private $arrayOperations = Array('POST/' => 'register', 'PUT/' => 'update', 'PUT/delete' => 'delete', 'GET/' => 'search');
 
     public function __construct($method, $protocol, $host, $uri = null, $queryString = null, $body = null) {
         //Cria uma instância da classe requestValidador e joga na variável $rv
@@ -74,8 +74,9 @@ class Request {
     private function setUri($uri) {
         $cleanUri = explode('?', $uri); //Quebra a uri na '?' para separar da query string
         $arrayUri = explode('/', $cleanUri[0]); //Depois, quebra a uri na '/' para separar cada parte e joga na variável $arrayUri
-        //Apenas para ajustar as posições do array caso os arquivos não estejam na raiz da pasta html ou htdocs. Essa parte não é necessária para o projeto
-        if ($arrayUri[1] == "ProjetoDW") {
+        //Apenas para ajustar as posições do array caso os arquivos não estejam na raiz da pasta html ou htdocs. 
+        //Essa parte não é necessária para o projeto
+        if ($arrayUri[1] == "danilo-silva") {
             unset($arrayUri[1]);
             $arrayUri = array_values($arrayUri);
         }
@@ -95,7 +96,6 @@ class Request {
                 $a = explode('=', $value);
                 if (!$this->rv->isQueryStringValid($a))
                     throw new RequestException("400", "Bad request");
-                $finalQueryString[$a[0]] = $a[1];
             }
         }
         $this->queryString = $finalQueryString;
@@ -105,6 +105,7 @@ class Request {
         $bodyArray = json_decode($body, true);
         if (!$this->rv->isBodyValid($bodyArray, $this->operation, $this->resource))
             throw new RequestException("400", "Bad request");
+
 
         $this->body = $bodyArray;
     }

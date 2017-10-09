@@ -2,65 +2,60 @@
 
 //include_once "IrequestValidator.php";
 
-class RequestValidator implements IRequestValidator
-{
+class RequestValidator implements IRequestValidator {
+
     //lista de métodos aceitos
     private $allowedMethods = Array('GET', 'PUT', 'POST');
-
     //Lista de protocolos aceitos
     private $allowedProtocols = Array('HTTP/1.1');
-
     //lista de resources aceitos
-    private $allowedUris = Array('products', 'providers', 'employees', 'users', 'roles', 'sections', 'sales', 
+    private $allowedUris = Array('products', 'providers', 'employees', 'users', 'roles', 'sections', 'sales',
         'purchases', 'bonus', 'lostproducts', 'saleitems', 'purchaseitems');
-
+    private $allowedOperations = Array("PUT" => Array("", "delete"), "GET" => Array(""), "POST" => Array(""));
     //Lista de atributos que devem vir no body. Por exemplo, se o resource que veio foi posts, no body devem ter title, username e text.
     // A validação do body só será feita se o método que veio na request exigir informações do body (POST e PUT)
-    private $requiredBodys =
-        Array(
-            'products' => Array('name', 'description', 'purchasePrice', 'salePrice', 'sectionId', 'providerId', 'stock'),
-            'providers' => Array('name', 'cnpj', 'fone', 'email', 'description'),
-            'employees' => Array('name', 'cpf', 'rg', 'fone', 'email', 'birthdate', 'roleId'),
-            'users' => Array('employeeId', 'userType', 'password'),
-            'roles' => Array('name', 'description', 'salary'),
-            'sections' => Array('name', 'description'),
-            'sales' => Array('timestamp', 'totalPrice', 'formOfPayment'),
-            'purchases' => Array('timestamp', 'totalPrice', 'providerId', 'finished'),
-            'lostproducts' => Array('productId', 'timestamp', 'reason', 'quantity', 'totalPrice'),
-            'bonus' => Array('productId', 'timestamp', 'reason', 'quantity'),
-            'saleitems' => Array('saleId', 'productId', 'quantity', 'totalValue'),
-            'purchaseitems' => Array('purchaseId', 'productId', 'quantity', 'totalValue')
-        );
+    private $bodyAttributes = Array(
+        'products' => Array('name', 'description', 'purchaseprice', 'saleprice', 'section', 'provider', 'currentstock'),
+        'providers' => Array('name', 'cnpj', 'phones', 'email', 'description'),
+        'employees' => Array('name', 'cpf', 'phones', 'email', 'birthdate', 'role'),
+        'users' => Array('employee', 'usertype', 'password'),
+        'roles' => Array('name', 'description', 'salary'),
+        'sections' => Array('name', 'description'),
+        'sales' => Array('saleitems', 'totalprice', 'formofpayment', 'cashier'),
+        'purchases' => Array('totalprice', 'provider', 'purchaseitems'),
+        'items' => Array('product', 'quantity', 'totalvalue')
+    );
 
-    public function isUriValid($arrayUri, $method)
-    {
-        //verifica se o resource recebido está na lista de resources aceitos
-        if (!in_array($arrayUri[1], $this->allowedUris))
+    public function isUriValid($arrayUri, $method) {
+        //verifica se o resource recebido está na lista de resources aceitos        
+        if ((!in_array($arrayUri[1], $this->allowedUris)) || !$this->isUriOperationValid($arrayUri, $method) || !$this->isUriSizeValid($arrayUri))
             return false;
 
-        //verifica se a operação recebida está de acordo com o método. Por exemplo, a operação delete só é aceita se vier com o metódo PUT.
-        //Para fazer esta validação, verifica o que está na posição 2 do arrayAuri, que é onde deve vir a operação
+        //Se passar por todas as validações, retorna true
+        return true;
+    }
+
+    private function isUriOperationValid($arrayUri, $method) {
         if (isset($arrayUri[2])) {
-            if ($method == "PUT") {
-                if ($arrayUri[2] != "" && $arrayUri[2] != "delete")
-                    return false;
-            } else {
-                if ($arrayUri[2] != "")
-                    return false;
-            }
+            if (!in_array($arrayUri[2], $this->allowedOperations[$method]))
+                return false;
         }
+
+        return true;
+    }
+
+    private function isUriSizeValid($arrayUri) {
         //verifica se a quantidade de informações passadas na uri é válida. 
         //A posição 3 do array de uri (se estiver setada) só pode estar vazia, e não podem ter mais informações na uri
         if (isset($arrayUri[3])) {
             if ($arrayUri[3] != "" || count($arrayUri) > 4)
                 return false;
         }
-        //Se passar por todas as validações, retorna true
+
         return true;
     }
 
-    public function isMethodValid($method)
-    {
+    public function isMethodValid($method) {
 
         //Verifica se o método recebido está na lista de métodos aceitos. Se não estiver, retorna false.
         if (!in_array($method, $this->allowedMethods))
@@ -69,8 +64,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-    public function isProtocolValid($protocol)
-    {
+    public function isProtocolValid($protocol) {
         //Verifica se o protocolo recebido está na lista de protocolos aceitos.
         if (!in_array($protocol, $this->allowedProtocols))
             return false;
@@ -78,9 +72,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-
-    public function isQueryStringValid($qs)
-    {
+    public function isQueryStringValid($qs) {
         //A variável $qs deve ser uma array com duas posições, na posição 0 deve estar a chave e na posição 1 deve estar o valor, por exemplo, $qs[0] = "name" e $qs[1] = "cebola".
 
         if (isset($qs[0]) && $qs[0] != "") {    //no primeiro if verifica se a posição 0 está preenchida e se o valor é diferente de  vazio.
@@ -90,21 +82,138 @@ class RequestValidator implements IRequestValidator
         return false;
     }
 
-    public function isBodyValid($body, $operation, $resource)
-    {
-        //Se a operação for register ou update, é feita a validação dos atributos no body.
-        if ($operation == "register" || $operation == "update") {
-            //Pega cada item do array de atributos requeridos no body ($this->requiredBodys) de acordo com o resource que foi passado e faz um for com eles, jogando na variável $value
-            foreach ($this->requiredBodys[$resource] as $value) {
-                if (!isset($body[$value]))  //Por meio do foreach, vai verificando se cada item na lista de atributos exigidos esta setado no corpo da requisição recebida
-                    return false;           //Se algum não estiver setado, retorna false
-            }
+/////////////////////////////////Validação do Body///////////////////////////////////
+// Esta função direciona a validação do body de acordo com o recurso
+    public function isBodyValid($body, $operation, $resource) {
+        if ($operation != "search") {
+            $functionName = "is" . $resource . "BodyValid";
+            return ($this->$functionName($body) && $this->isSetId($body, $operation));
         }
-        //Se a operação for update ou delete, também é verificado se foi enviado o id do objeto a ser manipulado
-        if (($operation == "update" || $operation == "delete") && !isset($body["_id"]))
-            return false;           //Se não for recebido, retorna false
 
-        // Se passar pelas validações, retorna true
         return true;
     }
+
+//Valida o body de acordo com o recurso passado
+    private function validBodyAttributes($resource, $array) {
+        foreach ($this->bodyAttributes[$resource] as $value) {
+            if (!isset($array[$value]))  //Por meio do foreach, vai verificando se cada item na lista de atributos exigidos esta setado no corpo da requisição recebida
+                return false;           //Se algum não estiver setado, retorna false
+        }
+        return true;
+    }
+
+    private function isSetId($body, $operation) {
+        //Se a operação for update ou delete, também é verificado se foi enviado o id do objeto a ser manipulado
+        if (($operation == "update" || $operation == "delete") && !isset($body["id"]))
+            return false;           //Se não for recebido, retorna false
+
+        return true;
+    }
+
+//********************Validações para cada recurso*************************
+//1 - Validar corpo do Employee
+    private function isEmployeesBodyValid($body) {
+        if (!$this->validBodyAttributes('employees', $body))
+            return false;
+
+        if (!$this->isRolesBodyValid($body['role']))
+            return false;
+
+        return true;
+    }
+
+//2 - Validar corpo do Products
+    private function isProductsBodyValid($body) {
+        if (!$this->validBodyAttributes('products', $body))
+            return false;
+
+        if (!$this->isSectionsBodyValid($body['section']))
+            return false;
+
+        if (!$this->isProvidersBodyValid($body['provider']))
+            return false;
+
+        return true;
+    }
+
+//3 - Validar corpo do Provider
+    private function isProvidersBodyValid($body) {
+        if (!$this->validBodyAttributes('providers', $body))
+            return false;
+
+        return true;
+    }
+
+//4 - Validar corpo do Purchases
+    private function isPurchasesBodyValid($body) {
+        if (!$this->validBodyAttributes('purchases', $body))
+            return false;
+
+        if (!$this->isProvidersBodyValid($body['provider']))
+            return false;
+
+        foreach ($body['purchaseitems'] as $item) {
+            if (!$this->isItemsBodyValid($item))
+                return false;
+        }
+
+        return true;
+    }
+
+//4.1 - Purchase items
+    private function isItemsBodyValid($body) {
+        if (!$this->validBodyAttributes('items', $body))
+            return false;
+
+        if (!$this->isProductsBodyValid($body['product']))
+            return false;
+
+        return true;
+    }
+
+//5 - Validar corpo do Roles
+    private function isRolesBodyValid($body) {
+        if (!$this->validBodyAttributes('roles', $body))
+            return false;
+
+        return true;
+    }
+
+//6 - Validar corpo do Sales
+    private function isSalesBodyValid($body) {
+        if (!$this->validBodyAttributes('sales', $body))
+            return false;
+
+        if (!$this->isEmployeesBodyValid($body['cashier']))
+            return false;
+
+        foreach ($body['saleitems'] as $item) {
+            if (!$this->isItemsBodyValid($item))
+                return false;
+        }
+
+        return true;
+    }
+
+//7 - Validar corpo do Sections
+    private function isSectionsBodyValid($body) {
+        if (!$this->validBodyAttributes('sections', $body))
+            return false;
+
+        return true;
+    }
+
+//8 - Validar corpo do Users
+    private function isUsersBodyValid($body) {
+        if (!$this->validBodyAttributes('users', $body))
+            return false;
+
+        if (!$this->isEmployeesBodyValid($body['employee']))
+            return false;
+
+        return true;
+    }
+
+//***********************************************************************
+//////////////////////////////////////////////////////////////////////////
 }

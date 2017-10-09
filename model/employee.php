@@ -4,21 +4,21 @@ class Employee {
 
     private $name;
     private $cpf;
-    private $rg;
-    private $phone;
+    private $phones;
     private $email;
     private $birthdate;
-    private $roleId;
+    private $role;
+    private $ev;
 
-    public function __construct($name, $cpf, $rg, $phone, $email, $birthdate, $roleId) {
-        //$this->uv = new UserValidator();
-        $this->name = $name;
-        $this->cpf = $cpf;
-        $this->rg = $rg;
-        $this->phone = $phone;
-        $this->email = $email;
-        $this->birthdate = $birthdate;
-        $this->roleId = $roleId;
+    public function __construct($name, $cpf, $phones, $email, $birthdate, $role) {
+        $this->ev = new EmployeeValidator();
+        
+        $this->setName($name);
+        $this->setCpf($cpf);
+        $this->setPhones($phones);
+        $this->setEmail($email);
+        $this->setBirthdate($birthdate);
+        $this->setRole($role);
     }
 
     public function getName() {
@@ -26,6 +26,9 @@ class Employee {
     }
 
     public function setName($name) {
+        if (!$this->ev->isNameValid($name))
+            throw new RequestException("400", "Bad request");
+        
         $this->name = $name;
     }
 
@@ -34,23 +37,21 @@ class Employee {
     }
 
     public function setCpf($cpf) {
+        if (!$this->ev->isCpfValid($cpf))
+            throw new RequestException("400", "Bad request");
+        
         $this->cpf = $cpf;
     }
 
-    public function getRg() {
-        return $this->rg;
-    }
-
-    public function setRg($rg) {
-        $this->rg = $rg;
-    }
-
-    public function getPhone() {
+    public function getPhones() {
         return $this->phone;
     }
 
-    public function setPhone($phone) {
-        $this->phone = $phone;
+    public function setPhones($phones) {
+        if (!$this->ev->isPhonesValid($phones))
+            throw new RequestException("400", "Bad request");
+        
+        $this->phones = $phones;
     }
 
     public function getEmail() {
@@ -58,6 +59,9 @@ class Employee {
     }
 
     public function setEmail($email) {
+        if (!$this->ev->isEmailValid($email))
+            throw new RequestException("400", "Bad request");
+        
         $this->email = $email;
     }
 
@@ -66,15 +70,18 @@ class Employee {
     }
 
     public function setBirthdate($birthdate) {
+        if (!$this->ev->isBirthdateValid($birthdate))
+            throw new RequestException("400", "Bad request");
+        
         $this->birthdate = $birthdate;
     }
 
-    public function getFunctionId() {
-        return $this->roleId;
+    public function getRole() {
+        return $this->role;
     }
 
-    public function setFunctionId($functionId) {
-        $this->roleId = $roleId;
+    public function setRole($role) {
+        $this->role = new Role($role['name'], $role['description'], $role['salary']);
     }
 
 }

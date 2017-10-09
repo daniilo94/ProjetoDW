@@ -4,11 +4,13 @@ class Section {
 
     private $name;
     private $description;
+    private $sv;
 
     public function __construct($name, $description) {
-        //$this->uv = new UserValidator();
-        $this->name = $name;
-        $this->description = $description;
+        $this->sv = new SectionValidator();
+
+        $this->setName($name);
+        $this->setDescription($description);
     }
 
     public function getName() {
@@ -16,6 +18,9 @@ class Section {
     }
 
     public function setName($name) {
+        if (!$this->sv->isNameValid($name))
+            throw new RequestException("400", "Bad request");
+
         $this->name = $name;
     }
 
@@ -24,6 +29,9 @@ class Section {
     }
 
     public function setDescription($description) {
+        if (!$this->sv->isDescriptionValid($description))
+            throw new RequestException("400", "Bad request");
+
         $this->description = $description;
     }
 

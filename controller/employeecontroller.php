@@ -27,8 +27,10 @@ class EmployeeController {
         $body = $this->request->getBody();
         $collection = $this->request->getResource();
         try {
-            new Employee($body['name'], $body['cpf'], $body['rg'], $body['fone'], $body['email'], $body['birthdate'], $body['roleId']);
-            return (new DBHandler())->insert($body, $collection);
+            new Employee($body['name'], $body['cpf'], $body['phones'], $body['email'], $body['birthdate'], $body['role']);
+            (new DBHandler())->insert($body, $collection);
+
+            return json_encode(Array('code' => '200', 'message' => 'Ok'));
         } catch (RequestException $ue) {
             return $ue->toJson();
         }
