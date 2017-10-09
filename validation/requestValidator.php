@@ -74,11 +74,11 @@ class RequestValidator implements IRequestValidator {
 
     public function isQueryStringValid($qs) {
         //A variável $qs deve ser uma array com duas posições, na posição 0 deve estar a chave e na posição 1 deve estar o valor, por exemplo, $qs[0] = "name" e $qs[1] = "cebola".
-
-        if (isset($qs[0]) && $qs[0] != "") {    //no primeiro if verifica se a posição 0 está preenchida e se o valor é diferente de  vazio.
-            if (isset($qs[1]) && $qs[1] != "")   //Se sim, faz a mesma verificação na posição 1. Caso os dois sejam válidos, a função retorna true.
+        if (isset($qs[0], $qs[1])) {    //no primeiro if verifica se a posição 0 está preenchida e se o valor é diferente de  vazio.
+            if ($qs[0] != "" && $qs[1] != "")   //Se sim, faz a mesma verificação na posição 1. Caso os dois sejam válidos, a função retorna true.
                 return true;
         }
+
         return false;
     }
 

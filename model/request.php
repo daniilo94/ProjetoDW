@@ -92,6 +92,7 @@ class Request {
                 $a = explode('=', $value);
                 if (!$this->rv->isQueryStringValid($a))
                     throw new RequestException("400", "Bad request");
+                $finalQueryString[$a[0]] = $a[1];
             }
         }
         $this->queryString = $finalQueryString;
