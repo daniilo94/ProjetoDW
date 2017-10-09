@@ -113,87 +113,121 @@ class RequestValidator implements IRequestValidator {
 //********************Validações para cada recurso*************************
 //1 - Validar corpo do Employee
     private function isEmployeesBodyValid($body) {
-        if (!$this->validBodyAttributes('employees', $body))
-            return false;
+        return ($this->validBodyAttributes('employees', $body) && $this->isRolesBodyValid($body['role']));
 
-        if (!$this->isRolesBodyValid($body['role']))
-            return false;
-
-        return true;
+//        if (!$this->validBodyAttributes('employees', $body))
+//            return false;
+//
+//        if (!$this->isRolesBodyValid($body['role']))
+//            return false;
+//
+//        return true;
     }
 
 //2 - Validar corpo do Products
     private function isProductsBodyValid($body) {
-        if (!$this->validBodyAttributes('products', $body) || !$this->isSectionsBodyValid($body['section']) || !$this->isProvidersBodyValid($body['provider']))
-            return false;
+        return ($this->validBodyAttributes('products', $body) && $this->isSectionsBodyValid($body['section']) &&
+            $this->isProvidersBodyValid($body['provider']));
 
-        return true;
+//        if (!$this->validBodyAttributes('products', $body) || !$this->isSectionsBodyValid($body['section']) || !$this->isProvidersBodyValid($body['provider']))
+//            return false;
+//
+//        return true;
     }
 
 //3 - Validar corpo do Provider
     private function isProvidersBodyValid($body) {
-        if (!$this->validBodyAttributes('providers', $body))
-            return false;
+        return ($this->validBodyAttributes('providers', $body));
 
-        return true;
+//        if (!$this->validBodyAttributes('providers', $body))
+//            return false;
+//
+//        return true;
     }
 
 //4 - Validar corpo do Purchases
     private function isPurchasesBodyValid($body) {
-        if (!$this->validBodyAttributes('purchases', $body) || !$this->isProvidersBodyValid($body['provider']))
-            return false;
+        $valid = ($this->validBodyAttributes('purchases', $body) && $this->isProvidersBodyValid($body['provider']));
 
         foreach ($body['purchaseitems'] as $item) {
             if (!$this->isItemsBodyValid($item))
                 return false;
         }
 
-        return true;
+        return $valid;
+
+
+//        if (!$this->validBodyAttributes('purchases', $body) || !$this->isProvidersBodyValid($body['provider']))
+//            return false;
+//
+//        foreach ($body['purchaseitems'] as $item) {
+//            if (!$this->isItemsBodyValid($item))
+//                return false;
+//        }
+//
+//        return true;
     }
 
 //4.1 - Purchase items
     private function isItemsBodyValid($body) {
-        if (!$this->validBodyAttributes('items', $body) || !$this->isProductsBodyValid($body['product']))
-            return false;
+        return ($this->validBodyAttributes('items', $body) && $this->isProductsBodyValid($body['product']));
 
-        return true;
+//        if (!$this->validBodyAttributes('items', $body) || !$this->isProductsBodyValid($body['product']))
+//            return false;
+//
+//        return true;
     }
 
 //5 - Validar corpo do Roles
     private function isRolesBodyValid($body) {
-        if (!$this->validBodyAttributes('roles', $body))
-            return false;
+        return ($this->validBodyAttributes('roles', $body));
 
-        return true;
+//        if (!$this->validBodyAttributes('roles', $body))
+//            return false;
+//
+//        return true;
     }
 
 //6 - Validar corpo do Sales
     private function isSalesBodyValid($body) {
-        if (!$this->validBodyAttributes('sales', $body) || !$this->isEmployeesBodyValid($body['cashier']))
-            return false;
+        $valid = ($this->validBodyAttributes('sales', $body) && $this->isEmployeesBodyValid($body['cashier']));
 
         foreach ($body['saleitems'] as $item) {
             if (!$this->isItemsBodyValid($item))
                 return false;
         }
 
-        return true;
+        return $valid;
+
+//        if (!$this->validBodyAttributes('sales', $body) || !$this->isEmployeesBodyValid($body['cashier']))
+//            return false;
+//
+//        foreach ($body['saleitems'] as $item) {
+//            if (!$this->isItemsBodyValid($item))
+//                return false;
+//        }
+//
+//        return true;
     }
 
 //7 - Validar corpo do Sections
     private function isSectionsBodyValid($body) {
-        if (!$this->validBodyAttributes('sections', $body))
-            return false;
+        return ($this->validBodyAttributes('sections', $body));
 
-        return true;
+//        if (!$this->validBodyAttributes('sections', $body))
+//            return false;
+//
+//        return true;
     }
 
 //8 - Validar corpo do Users
     private function isUsersBodyValid($body) {
-        if (!$this->validBodyAttributes('users', $body) || !$this->isEmployeesBodyValid($body['employee']))
-            return false;
+        return ($this->validBodyAttributes('users', $body) && $this->isEmployeesBodyValid($body['employee']));
 
-        return true;
+//        if (!$this->validBodyAttributes('users', $body) || !$this->isEmployeesBodyValid($body['employee']))
+//            return false;
+//
+//        return true;
     }
 
 //***********************************************************************
