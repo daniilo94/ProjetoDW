@@ -2,8 +2,7 @@
 
 //include_once "IrequestValidator.php";
 
-class RequestValidator implements IRequestValidator
-{
+class RequestValidator implements IRequestValidator {
 
     //lista de métodos aceitos
     private $allowedMethods = Array('GET', 'PUT', 'POST');
@@ -27,8 +26,7 @@ class RequestValidator implements IRequestValidator
         'items' => Array('product', 'quantity', 'totalvalue')
     );
 
-    public function isUriValid($arrayUri, $method)
-    {
+    public function isUriValid($arrayUri, $method) {
         //verifica se o resource recebido está na lista de resources aceitos        
         if ((!in_array($arrayUri[1], $this->allowedUris)) || !$this->isUriOperationValid($arrayUri, $method) || !$this->isUriSizeValid($arrayUri))
             return false;
@@ -37,8 +35,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-    private function isUriOperationValid($arrayUri, $method)
-    {
+    private function isUriOperationValid($arrayUri, $method) {
         if (isset($arrayUri[2])) {
             if (!in_array($arrayUri[2], $this->allowedOperations[$method]))
                 return false;
@@ -47,8 +44,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-    private function isUriSizeValid($arrayUri)
-    {
+    private function isUriSizeValid($arrayUri) {
         //verifica se a quantidade de informações passadas na uri é válida. 
         //A posição 3 do array de uri (se estiver setada) só pode estar vazia, e não podem ter mais informações na uri
         if (isset($arrayUri[3])) {
@@ -59,8 +55,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-    public function isMethodValid($method)
-    {
+    public function isMethodValid($method) {
 
         //Verifica se o método recebido está na lista de métodos aceitos. Se não estiver, retorna false.
         if (!in_array($method, $this->allowedMethods))
@@ -69,8 +64,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-    public function isProtocolValid($protocol)
-    {
+    public function isProtocolValid($protocol) {
         //Verifica se o protocolo recebido está na lista de protocolos aceitos.
         if (!in_array($protocol, $this->allowedProtocols))
             return false;
@@ -78,8 +72,7 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-    public function isQueryStringValid($qs)
-    {
+    public function isQueryStringValid($qs) {
         //A variável $qs deve ser uma array com duas posições, na posição 0 deve estar a chave e na posição 1 deve estar o valor, por exemplo, $qs[0] = "name" e $qs[1] = "cebola".
         if (isset($qs[0], $qs[1])) {    //no primeiro if verifica se a posição 0 está preenchida e se o valor é diferente de  vazio.
             if ($qs[0] != "" && $qs[1] != "")   //Se sim, faz a mesma verificação na posição 1. Caso os dois sejam válidos, a função retorna true.
@@ -89,36 +82,41 @@ class RequestValidator implements IRequestValidator
         return false;
     }
 
-/////////////////////////////////Validação do Body///////////////////////////////////
-// Esta função direciona a validação do body de acordo com o recurso
+//*********************** Validação do Body *******************************************
 
-
-    public function isBodyValid($body, $operation, $resource)
-    {
-        if ($operation != "search") {
-            $functionName = "is" . $resource . "BodyValid";
-            return ($this->$functionName($body) && $this->isSetId($body, $operation));
+    public function isBodyValid($resource, $operation, $body) {
+        if ($operation != 'search') {
+            return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body, $operation));
         }
 
         return true;
     }
 
-    private function validBodyAttributes($validations)
-    {
-        foreach ($validations as $v) {
-            $resource = $v[0];
-            $array = $v[1];
+    private function validateBodyAttributes($resource, $body) {
+        if (isset($body[0]))
+            return $this->validateBodyArrays($resource, $body);
 
-            foreach ($this->bodyAttributes[$resource] as $value) {
-                if (!isset($array[$value]))
+        foreach ($this->bodyAttributes[$resource] as $key => $value) {
+            if (!isset($body[$value]))
+                return false;
+
+            if (!is_int($key)) {
+                if (!$this->validateBodyAttributes($key, $body[$value]))
                     return false;
             }
         }
         return true;
     }
 
-    private function isSetId($body, $operation)
-    {
+    private function validateBodyArrays($resource, $array) {
+        foreach ($array as $value) {
+            if (!$this->validateBodyAttributes($resource, $value))
+                return false;
+        }
+        return true;
+    }
+
+    private function isSetId($body, $operation) {
         //Se a operação for update ou delete, também é verificado se foi enviado o id do objeto a ser manipulado
         if (($operation == "update" || $operation == "delete") && !isset($body["id"]))
             return false;           //Se não for recebido, retorna false
@@ -126,103 +124,5 @@ class RequestValidator implements IRequestValidator
         return true;
     }
 
-//********************Validações para cada recurso*************************
-//Products
-    private function isProductsBodyValid($body)
-    {
-        $validations = Array();
-        $validations[] = ["products", $body];
-        $validations[] = ["sections", $body['section']];
-        $validations[] = ["providers", $body['provider']];
-
-        return $this->validBodyAttributes($validations);
-    }
-
-    //Employees
-    private function isEmployeesBodyValid($body)
-    {
-        $validations = Array();
-        $validations[] = ["employees", $body];
-        $validations[] = ["roles", $body['role']];
-
-        return $this->validBodyAttributes($validations);
-    }
-
-    //Providers
-    private function isProvidersBodyValid($body)
-    {
-        return $this->validBodyAttributes(['providers', $body]);
-    }
-
-    //Items
-    private function isItemsBodyValid($body)
-    {
-        $validations = Array();
-        $validations[] = ['items', $body];
-        $validations[] = ["products", $body['product']];
-        $validations[] = ["sections", $body['product']['section']];
-        $validations[] = ["providers", $body['product']['provider']];
-
-        return $this->validBodyAttributes($validations);
-    }
-
-    //Roles
-    private function isRolesBodyValid($body)
-    {
-        return $this->validBodyAttributes(['roles', $body]);
-
-    }
-
-    //Sections
-    private function isSectionsBodyValid($body)
-    {
-        return $this->validBodyAttributes(['sections', $body]);
-
-    }
-
-    //Users
-    private function isUsersBodyValid($body)
-    {
-        $validations = Array();
-        $validations[] = ['users', $body];
-        $validations[] = ['employees', $body['employee']];
-
-        return $this->validBodyAttributes($validations);
-    }
-
-    //Purchases
-    private function isPurchasesBodyValid($body)
-    {
-        $validations = Array();
-        $validations[] = ['purchases', $body];
-        $validations[] = ['providers', $body['provider']];
-        if (!$this->validBodyAttributes($validations))
-            return false;
-
-        foreach ($body['purchaseitems'] as $item) {
-            if (!$this->isItemsBodyValid($item))
-                return false;
-        }
-
-        return true;
-    }
-
-    private function isSalesBodyValid($body)
-    {
-        $validations = Array();
-        $validations[] = ['sales', $body];
-        $validations[] = ['employees', $body['cashier']];
-        if (!$this->validBodyAttributes($validations))
-            return false;
-
-        foreach ($body['saleitems'] as $item) {
-            if (!$this->isItemsBodyValid($item))
-                return false;
-        }
-
-        return true;
-    }
-
-//***********************************************************************
-//////////////////////////////////////////////////////////////////////////
+//************************************************************************************
 }
