@@ -15,20 +15,20 @@ class RequestValidator implements IRequestValidator {
     //Lista de atributos que devem vir no body. Por exemplo, se o resource que veio foi posts, no body devem ter title, username e text.
     // A validação do body só será feita se o método que veio na request exigir informações do body (POST e PUT)
     private $bodyAttributes = Array(
-        'products' => Array('name', 'description', 'purchaseprice', 'saleprice', 'section', 'provider', 'currentstock'),
+        'products' => Array('name', 'description', 'purchaseprice', 'saleprice', 'sections' => 'section', 'providers' => 'provider', 'currentstock'),
         'providers' => Array('name', 'cnpj', 'phones', 'email', 'description'),
-        'employees' => Array('name', 'cpf', 'phones', 'email', 'birthdate', 'role'),
-        'users' => Array('employee', 'usertype', 'password'),
+        'employees' => Array('name', 'cpf', 'phones', 'email', 'birthdate', 'roles' => 'role'),
+        'users' => Array('employees' => 'employee', 'usertype', 'password'),
         'roles' => Array('name', 'description', 'salary'),
         'sections' => Array('name', 'description'),
-        'sales' => Array('saleitems', 'totalprice', 'formofpayment', 'cashier'),
-        'purchases' => Array('totalprice', 'provider', 'purchaseitems'),
-        'items' => Array('product', 'quantity', 'totalvalue')
+        'sales' => Array('items' => 'saleitems', 'totalprice', 'formofpayment', 'employees' => 'cashier'),
+        'purchases' => Array('totalprice', 'providers' => 'provider', 'items' => 'purchaseitems'),
+        'items' => Array('products' => 'product', 'quantity', 'totalvalue')
     );
 
     public function isUriValid($arrayUri, $method) {
         //verifica se o resource recebido está na lista de resources aceitos        
-        if ((!in_array($arrayUri[1], $this->allowedUris)) || !$this->isUriOperationValid($arrayUri, $method) || !$this->isUriSizeValid($arrayUri))
+        if ((!in_array($arrayUri[1], $this->allowedUris)) || !$this->isUriOperationValid($arrayUri, $method))
             return false;
 
         //Se passar por todas as validações, retorna true
@@ -44,19 +44,8 @@ class RequestValidator implements IRequestValidator {
         return true;
     }
 
-    private function isUriSizeValid($arrayUri) {
-        //verifica se a quantidade de informações passadas na uri é válida. 
-        //A posição 3 do array de uri (se estiver setada) só pode estar vazia, e não podem ter mais informações na uri
-        if (isset($arrayUri[3])) {
-            if ($arrayUri[3] != "" || count($arrayUri) > 4)
-                return false;
-        }
-
-        return true;
-    }
 
     public function isMethodValid($method) {
-
         //Verifica se o método recebido está na lista de métodos aceitos. Se não estiver, retorna false.
         if (!in_array($method, $this->allowedMethods))
             return false;
