@@ -1,12 +1,7 @@
 <?php
 
-//require_once ("model/user.php");
-//require_once ("database/database.php");
-//require_once ("exception/requestException.php");
-
 class ProductController {
 
-//    private $allowedOperations = Array('info' => 'search', 'register' => 'create', 'update' => 'update', 'disable' => 'disable');
     private $request;
 
     public function __construct($request) {
@@ -16,9 +11,6 @@ class ProductController {
     public function routeOperation() {
         //Pegar da request qual operação deve ser feita
         $operation = $this->request->getOperation();
-
-        //Sabendo qual operação ser feita, chamar a função correspondente por meio do array de operações
-        //$func = $this->allowedOperations[$operation];
 
         return $this->$operation();
     }
@@ -51,7 +43,15 @@ class ProductController {
     }
 
     private function delete() {
-        return "função de desativar";
+        $body = $this->request->getBody();
+        $collection = $this->request->getResource();
+        $id = new MongoDB\BSON\ObjectId($body['_id']);
+
+        (new DBHandler())->delete($collection, $id);
+
+        return json_encode(Array('code' => '200', 'message' => 'Ok'));
+
+        //return "função de desativar";
     }
 
 }
