@@ -74,11 +74,16 @@ class RequestValidator implements IRequestValidator {
 //*********************** Validação do Body *******************************************
 
     public function isBodyValid($resource, $operation, $body) {
-        if ($operation != 'search') {
-            return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body, $operation));
+        switch ($operation){
+            case "register":
+                return $this->validateBodyAttributes($resource, $body);
+            case "update":
+                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body, $operation));
+            case "delete":
+                return $this->isSetId($body);
+            default:
+                return true;
         }
-
-        return true;
     }
 
     private function validateBodyAttributes($resource, $body) {
@@ -105,10 +110,9 @@ class RequestValidator implements IRequestValidator {
         return true;
     }
 
-    private function isSetId($body, $operation) {
-        //Se a operação for update ou delete, também é verificado se foi enviado o id do objeto a ser manipulado
-        if (($operation == "update" || $operation == "delete") && !isset($body["id"]))
-            return false;           //Se não for recebido, retorna false
+    private function isSetId($body) {
+        if (!isset($body["_id"]))
+            return false;
 
         return true;
     }

@@ -50,7 +50,7 @@ class ProductController {
         return "função de atualizar";
     }
 
-    private function disable() {
+    private function delete() {
         return "função de desativar";
     }
 
