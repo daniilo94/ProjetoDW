@@ -78,7 +78,7 @@ class RequestValidator implements IRequestValidator {
             case "register":
                 return $this->validateBodyAttributes($resource, $body);
             case "update":
-                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body, $operation));
+                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body));
             case "delete":
                 return $this->isSetId($body);
             default:
