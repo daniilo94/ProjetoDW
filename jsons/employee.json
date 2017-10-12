@@ -1,0 +1,12 @@
+{
+	"name" : "João da Silva",
+	"cpf" : "941.277.330-71",
+	"phones" : ["(61)99645-8282"],
+	"email" : "joao@mlkdoido.com",
+	"birthdate" : "1990-01-01",
+	"role" : {
+		"name" : "Caixa",
+		"description" : "Funcionário que opera o caixa",
+		"salary" : 1200
+	}
+}

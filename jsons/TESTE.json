@@ -1,0 +1,8 @@
+{
+	"_id" : "59dff49e8026041948000802",
+	"name": "Batatas Inc", 
+	"cnpj" : "28.338.875/0001-17", 
+	"phones" : ["(61)99876-3272"], 
+	"email" : "cebolas@mail.com", 
+	"description" : "Fornecedor de cebolas"
+}

@@ -1,0 +1,64 @@
+{
+	"saleitems" : [
+		{
+			"product" : {
+				"name" : "Cebola roxa",
+				"description" : "Cebola roxa do Himalaia",
+				"purchaseprice" : "2.0",
+				"saleprice" : "3.0",
+				"measure" : "Quilo",
+				"section" : {
+					"name" : "Hortifruti",
+					"description" : "Seção de frutas, verduras e legumes"
+				},
+				"provider" : {
+					"name": "Cebolas Inc", 
+					"cnpj" : "28.338.875/0001-17", 
+					"phones" : ["(61)99876-3272"], 
+					"email" : "cebolas@mail.com", 
+					"description" : "Fornecedor de cebolas"
+				},
+				"currentstock" : 10
+			},
+			"quantity" : 5,
+			"totalvalue" : 15.0
+		},
+		{
+			"product" : {
+				"name" : "Cebola azul",
+				"description" : "Cebola azul do Triangulo das Bermudas",
+				"purchaseprice" : "2.5",
+				"saleprice" : "3.5",
+				"measure" : "Quilo",
+				"section" : {
+					"name" : "Hortifruti",
+					"description" : "Seção de frutas, verduras e legumes"
+				},
+				"provider" : {
+					"name": "Cebolas Inc", 
+					"cnpj" : "28.338.875/0001-17", 
+					"phones" : ["(61)99876-3272"], 
+					"email" : "cebolas@mail.com", 
+					"description" : "Fornecedor de cebolas"
+				},
+				"currentstock" : 10
+			},
+			"quantity" : 2,
+			"totalvalue" : 7.0
+		}
+	],
+	"totalprice" : 22.0,
+	"formofpayment" : "Débito",
+	"cashier" : {
+		"name" : "João da Silva",
+		"cpf" : "941.277.330-71",
+		"phones" : ["(61)99645-8282"],
+		"email" : "joao@mlkdoido.com",
+		"birthdate" : "1990-01-01",
+		"role" : {
+			"name" : "Caixa",
+			"description" : "Funcionário que opera o caixa",
+			"salary" : 1200
+		}
+	}
+}

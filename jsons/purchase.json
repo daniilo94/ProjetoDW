@@ -1,0 +1,58 @@
+{
+	"purchaseitems" : [
+		{
+			"product" : {
+				"name" : "Cebola roxa",
+				"description" : "Cebola roxa do Himalaia",
+				"purchaseprice" : "2.0",
+				"saleprice" : "3.0",
+				"measure" : "Quilo",
+				"section" : {
+					"name" : "Hortifruti",
+					"description" : "Seção de frutas, verduras e legumes"
+				},
+				"provider" : {
+					"name": "Cebolas Inc", 
+					"cnpj" : "28.338.875/0001-17", 
+					"phones" : ["(61)99876-3272"], 
+					"email" : "cebolas@mail.com", 
+					"description" : "Fornecedor de cebolas"
+				},
+				"currentstock" : 10
+			},
+			"quantity" : 20,
+			"totalvalue" : 40.0
+		},
+		{
+			"product" : {
+				"name" : "Cebola azul",
+				"description" : "Cebola azul do Triangulo das Bermudas",
+				"purchaseprice" : "2.5",
+				"saleprice" : "3.5",
+				"measure" : "Quilo",
+				"section" : {
+					"name" : "Hortifruti",
+					"description" : "Seção de frutas, verduras e legumes"
+				},
+				"provider" : {
+					"name": "Cebolas Inc", 
+					"cnpj" : "28.338.875/0001-17", 
+					"phones" : ["(61)99876-3272"], 
+					"email" : "cebolas@mail.com", 
+					"description" : "Fornecedor de cebolas"
+				},
+				"currentstock" : 10
+			},
+			"quantity" : 10,
+			"totalvalue" : 25.0
+		}
+	],
+	"totalprice" : 65.0,
+	"provider" : {
+		"name": "Cebolas Inc", 
+		"cnpj" : "28.338.875/0001-17", 
+		"phones" : ["(61)99876-3272"], 
+		"email" : "cebolas@mail.com", 
+		"description" : "Fornecedor de cebolas"
+	}
+}

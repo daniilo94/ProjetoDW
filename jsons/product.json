@@ -1,0 +1,19 @@
+{
+	"name" : "Cebola roxa",
+	"description" : "Cebola roxa do Himalaia",
+	"purchaseprice" : "2.0",
+	"saleprice" : "3.0",
+	"measure" : "Quilo",
+	"section" : {
+		"name" : "Hortifruti",
+		"description" : "Seção de frutas, verduras e legumes"
+	},
+	"provider" : {
+		"name": "Cebolas Inc", 
+		"cnpj" : "28.338.875/0001-17", 
+		"phones" : ["(61)99876-3272"], 
+		"email" : "cebolas@mail.com", 
+		"description" : "Fornecedor de cebolas"
+	},
+	"currentstock" : 10
+}
