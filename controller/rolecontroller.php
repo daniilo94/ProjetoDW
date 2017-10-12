@@ -36,12 +36,9 @@ class RoleController {
     }
 
     private function search() {
-        $options = Array(
-            'sort' => ['bdate' => -1]
-        );
         $queryString = $this->request->getQueryString();
         $collection = $this->request->getResource();
-        return (new DBHandler())->search($queryString, $collection, $options);
+        return (new DBHandler())->search($queryString, $collection);
     }
 
     private function update() {
