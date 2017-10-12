@@ -32,7 +32,7 @@ class DBHandler {
         return $result;
     }
 
-    public function search($parameters, $collection, $options = []) {
+    public function search($parameters, $collection) {
         $conn = $this->getConnection();
         $parameters["enabled"] = true;
         $options['projection'] = ['enabled' => 0, 'password'=> 0];

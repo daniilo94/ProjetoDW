@@ -72,7 +72,7 @@ class Request {
         $arrayUri = explode('/', $cleanUri[0]); //Depois, quebra a uri na '/' para separar cada parte e joga na variável $arrayUri
         //Apenas para ajustar as posições do array caso os arquivos não estejam na raiz da pasta html ou htdocs. 
         //Essa parte não é necessária para o projeto
-        if ($arrayUri[1] == "danilo-silva") {
+        if ($arrayUri[1] == "ProjetoDW") {
             unset($arrayUri[1]);
             $arrayUri = array_values($arrayUri);
         }
@@ -95,15 +95,17 @@ class Request {
                 $finalQueryString[$a[0]] = $a[1];
             }
         }
-        $this->queryString = $finalQueryString;
+        $this->queryString = $this->treatQueryString($finalQueryString); //$finalQueryString;
     }
 
     private function setBody($body) {
         $bodyArray = json_decode($body, true);
-        if (!$this->rv->isBodyValid($bodyArray, $this->operation, $this->resource))
+        if (!$this->rv->isBodyValid($this->resource, $this->operation, $bodyArray))
             throw new RequestException("400", "Bad request");
 
-
+        if (isset($bodyArray['_id']))
+            $bodyArray['_id'] = $this->treatId($bodyArray['_id']);
+        
         $this->body = $bodyArray;
     }
 
@@ -116,6 +118,30 @@ class Request {
         $uriOperation = (!isset($this->uri[2])) ? "" : $this->uri[2];
 
         $this->operation = $this->arrayOperations[$this->method . '/' . $uriOperation];
+    }
+
+    private function treatQueryString($qs) {
+        $newQs = Array();
+        if (isset($qs['_id'])) {
+            $newQs['_id'] = $this->treatId($qs['_id']);
+            unset($qs['_id']);
+        }
+
+        foreach ($qs as $key => $value) {
+            if (!is_numeric($value))
+                $newQs[$key] = new MongoDB\BSON\Regex('.*' . $value . '.*');
+            else
+                $newQs[$key] = (float) $value;
+        }
+
+        return $newQs;
+    }
+
+    private function treatId($id) {
+        if (preg_match('/^[a-f\d]{24}$/i', $id))
+            return new MongoDB\BSON\ObjectId($id);
+
+        return $id;
     }
 
 }
