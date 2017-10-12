@@ -1,6 +1,5 @@
 <?php
 
-
 class UserController {
 
     private $request;
@@ -12,8 +11,7 @@ class UserController {
     public function routeOperation() {
         //Pegar da request qual operação deve ser feita
         $operation = $this->request->getOperation();
-
-        //Sabendo qual operação ser feita, chamar a função correspondente
+        //Chamar a operação
         return $this->$operation();
     }
 
@@ -37,11 +35,29 @@ class UserController {
     }
 
     private function update() {
-        return "função de atualizar";
+        $body = $this->request->getBody();
+        $collection = $this->request->getResource();
+        $id = $body['_id'];
+        unset($body['_id']);
+        try {
+            new User($body['employee'], $body['usertype'], $body['password']);
+            $result = (new DBHandler())->update($collection, ['_id' => $id, 'enabled' => true], ['$set' => $body]);
+            if ($result->getMatchedCount() == 0)
+                throw new RequestException('404', 'Object not found');
+            return json_encode(Array('code' => '200', 'message' => 'Ok'));
+        } catch (RequestException $ue) {
+            return $ue->toJson();
+        }
     }
 
-    private function disable() {
-        return "função de desativar";
+    private function delete() {
+        $body = $this->request->getBody();
+        $collection = $this->request->getResource();
+        $id = $body['_id'];
+        $result = (new DBHandler())->delete($collection, $id);
+        if ($result->getModifiedCount() == 0)
+            throw new RequestException('404', 'Object not found');
+        return json_encode(Array('code' => '200', 'message' => 'Ok'));
     }
 
 }

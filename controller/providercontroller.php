@@ -11,8 +11,7 @@ class ProviderController {
     public function routeOperation() {
         //Pegar da request qual operação deve ser feita
         $operation = $this->request->getOperation();
-
-        //Chamar a fução usando o nome da operação
+        //Chamar a operação
         return $this->$operation();
     }
 
@@ -30,25 +29,35 @@ class ProviderController {
     }
 
     private function search() {
-        $queryString = $this->treatSearchParameters($this->request->getQueryString());
+        $queryString = $this->request->getQueryString();
         $collection = $this->request->getResource();
         return (new DBHandler())->search($queryString, $collection);
     }
 
     private function update() {
-        return "função de atualizar";
+        $body = $this->request->getBody();
+        $collection = $this->request->getResource();
+        $id = $body['_id'];
+        unset($body['_id']);
+        try {
+            new Provider($body['name'], $body['cnpj'], $body['phones'], $body['email'], $body['description']);
+            $result = (new DBHandler())->update($collection, ['_id' => $id, 'enabled' => true], ['$set' => $body]);
+            if ($result->getMatchedCount() == 0)
+                throw new RequestException('404', 'Object not found');
+            return json_encode(Array('code' => '200', 'message' => 'Ok'));
+        } catch (RequestException $ue) {
+            return $ue->toJson();
+        }
     }
 
-    private function disable() {
-        return "função de desativar";
-    }
-    
-    private function treatSearchParameters($qs) {
-        if (isset($qs['id']) && (preg_match('/^[a-f\d]{24}$/i', $qs['id']))) {
-            $qs['_id'] = new MongoDB\BSON\ObjectId($qs['id']);
-            unset($qs['id']);
-        }
-        return $qs;
+    private function delete() {
+        $body = $this->request->getBody();
+        $collection = $this->request->getResource();
+        $id = $body['_id'];
+        $result = (new DBHandler())->delete($collection, $id);
+        if ($result->getModifiedCount() == 0)
+            throw new RequestException('404', 'Object not found');
+        return json_encode(Array('code' => '200', 'message' => 'Ok'));
     }
 
 }
