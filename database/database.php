@@ -35,6 +35,7 @@ class DBHandler {
     public function search($parameters, $collection) {
         $conn = $this->getConnection();
         $parameters["enabled"] = true;
+		$options = Array();
         $options['projection'] = ['enabled' => 0, 'password'=> 0];
         $query = new MongoDB\Driver\Query($parameters, $options);
         $rows = $conn->executeQuery("test." . $collection, $query);
