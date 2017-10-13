@@ -93,7 +93,7 @@ class RequestValidator implements IRequestValidator {
         if($operation == 'register' || $operation == 'update')
             $validAttributes = $this->validateBodyAttributes($resource, $body);
 
-        if($operation = 'update' || $operation = 'delete')
+        if($operation == 'update' || $operation == 'delete')
             $validId = $this->isSetId($body);
 
         return ($validAttributes && $validId);
