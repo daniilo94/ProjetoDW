@@ -135,7 +135,7 @@ class Request {
 
         foreach ($qs as $key => $value) {
             if (!is_numeric($value))
-                $newQs[$key] = new MongoDB\BSON\Regex('.*' . $value . '.*');
+                $newQs[$key] = new MongoDB\BSON\Regex('.*' . $value . '.*', '');
             else
                 $newQs[$key] = (float) $value;
         }

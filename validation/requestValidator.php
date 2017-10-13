@@ -87,29 +87,13 @@ class RequestValidator implements IRequestValidator {
 //    }
 
     public function isBodyValid($resource, $operation, $body) {
-        $validAttributes = true;
-        $validId = true;
+        if(!$this->isSetId($body, $operation))
+            return false;
 
         if($operation == 'register' || $operation == 'update')
-            $validAttributes = $this->validateBodyAttributes($resource, $body);
+            return $this->validateBodyAttributes($resource, $body);
 
-        if($operation == 'update' || $operation == 'delete')
-            $validId = $this->isSetId($body);
-
-        return ($validAttributes && $validId);
-
-
-//        //Faz a validação de acordo com a operação a ser feita
-//        switch ($operation){
-//            case "register":
-//                return $this->validateBodyAttributes($resource, $body); //valida só os atributos do corpo
-//            case "update":
-//                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body)); // valida os atributos e o _id
-//            case "delete":
-//                return $this->isSetId($body);   //valida só o _id
-//            default:
-//                return true;   //Se não veio uma das três operações, retorna true.
-//        }
+        return true;
     }
 
     private function validateBodyAttributes($resource, $body) {
@@ -141,8 +125,8 @@ class RequestValidator implements IRequestValidator {
     }
 
     //Verifica se está setado o _id no body. Só é necessário para update e delete
-    private function isSetId($body) {
-        if (!isset($body["_id"]))
+    private function isSetId($body, $operation) {
+        if (($operation == 'update' || $operation == 'delete') &&!isset($body["_id"]))
             return false;
 
         return true;
