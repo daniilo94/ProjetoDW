@@ -72,18 +72,44 @@ class RequestValidator implements IRequestValidator {
 
 //*********************** Validação do Body *******************************************
 
+//    public function isBodyValid($resource, $operation, $body) {
+//        //Faz a validação de acordo com a operação a ser feita
+//        switch ($operation){
+//            case "register":
+//                return $this->validateBodyAttributes($resource, $body); //valida só os atributos do corpo
+//            case "update":
+//                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body)); // valida os atributos e o _id
+//            case "delete":
+//                return $this->isSetId($body);   //valida só o _id
+//            default:
+//                return true;   //Se não veio uma das três operações, retorna true.
+//        }
+//    }
+
     public function isBodyValid($resource, $operation, $body) {
-        //Faz a validação de acordo com a operação a ser feita
-        switch ($operation){
-            case "register":
-                return $this->validateBodyAttributes($resource, $body); //valida só os atributos do corpo
-            case "update":
-                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body)); // valida os atributos e o _id
-            case "delete":
-                return $this->isSetId($body);   //valida só o _id
-            default:
-                return true;   //Se não veio uma das três operações, retorna true.
-        }
+        $validAttributes = true;
+        $validId = true;
+
+        if($operation == 'register' || $operation == 'update')
+            $validAttributes = $this->validateBodyAttributes($resource, $body);
+
+        if($operation = 'update' || $operation = 'delete')
+            $validId = $this->isSetId($body);
+
+        return ($validAttributes && $validId);
+
+
+//        //Faz a validação de acordo com a operação a ser feita
+//        switch ($operation){
+//            case "register":
+//                return $this->validateBodyAttributes($resource, $body); //valida só os atributos do corpo
+//            case "update":
+//                return ($this->validateBodyAttributes($resource, $body) && $this->isSetId($body)); // valida os atributos e o _id
+//            case "delete":
+//                return $this->isSetId($body);   //valida só o _id
+//            default:
+//                return true;   //Se não veio uma das três operações, retorna true.
+//        }
     }
 
     private function validateBodyAttributes($resource, $body) {
