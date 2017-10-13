@@ -41,10 +41,14 @@ class ProductController {
         unset($body['_id']);
         try {
             new Product($body['name'], $body['description'], $body['purchaseprice'], $body['saleprice'], $body['measure'], $body['section'], $body['provider'], $body['currentstock']);
+
             $result = (new DBHandler())->update($collection, ['_id' => $id, 'enabled' => true], ['$set' => $body]);
+
             if ($result->getMatchedCount() == 0)
                 throw new RequestException('404', 'Object not found');
+
             return json_encode(Array('code' => '200', 'message' => 'Ok'));
+
         } catch (RequestException $ue) {
             return $ue->toJson();
         }
@@ -54,9 +58,12 @@ class ProductController {
         $body = $this->request->getBody();
         $collection = $this->request->getResource();
         $id = $body['_id'];
+
         $result = (new DBHandler())->delete($collection, $id);
+
         if ($result->getModifiedCount() == 0)
             throw new RequestException('404', 'Object not found');
+
         return json_encode(Array('code' => '200', 'message' => 'Ok'));
     }
 

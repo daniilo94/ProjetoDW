@@ -49,9 +49,10 @@ class Request {
     }
 
     private function setMethod($method) {
-        //Se o método não for válido, lança uma excessão. Se for válido, é atribuído à classe.
+        //Se o método não for válido, lança uma excessão. Se for válido, é atribuído à variável $method.
         if (!$this->rv->isMethodValid($method))
             throw new RequestException("405", "Method not allowed");
+
         $this->method = $method;
     }
 
@@ -59,6 +60,7 @@ class Request {
         //Se o protocolo não for válido, lança uma excessão. Se for válido, é atribuído à classe.
         if (!$this->rv->isProtocolValid($protocol))
             throw new RequestException("505", "HTTP Version Not Supported");
+
         $this->protocol = $protocol;
     }
 
@@ -70,6 +72,7 @@ class Request {
     private function setUri($uri) {
         $cleanUri = explode('?', $uri); //Quebra a uri na '?' para separar da query string
         $arrayUri = explode('/', $cleanUri[0]); //Depois, quebra a uri na '/' para separar cada parte e joga na variável $arrayUri
+
         //Apenas para ajustar as posições do array caso os arquivos não estejam na raiz da pasta html ou htdocs. 
         //Essa parte não é necessária para o projeto
         if ($arrayUri[1] == "ProjetoDW") {
@@ -92,6 +95,7 @@ class Request {
                 $a = explode('=', $value);
                 if (!$this->rv->isQueryStringValid($a))
                     throw new RequestException("400", "Bad request");
+
                 $finalQueryString[$a[0]] = $a[1];
             }
         }
@@ -115,8 +119,10 @@ class Request {
     }
 
     private function setOperation() {
+        //Se veio alguma operação, joga na variável $uriOperation. Se não, deixa vazia
         $uriOperation = (!isset($this->uri[2])) ? "" : $this->uri[2];
 
+        //A operação vai ser igual a o que estiver na $arraOperations na posição da junção do $method + / + $uriOperation
         $this->operation = $this->arrayOperations[$this->method . '/' . $uriOperation];
     }
 

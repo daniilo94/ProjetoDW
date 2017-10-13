@@ -10,7 +10,7 @@ class DBHandler {
             $mng = new MongoDB\Driver\Manager("mongodb://localhost:27017");
 
             return $mng;
-        } catch (MongoDB\Driver\Exception\Exception $e) {
+        } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
 
             return json_encode(
                     Array(

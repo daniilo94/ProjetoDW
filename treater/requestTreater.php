@@ -4,11 +4,13 @@ class RequestTreater {
 
     private $controllers = Array(
         "users" => "UserController",
-        'products' => 'ProductController', 'providers' => 'ProviderController', 'employees' => 'EmployeeController',
-        'roles' => 'RoleController', 'sections' => 'SectionController', 'sales' => 'SaleController', 
-        'purchases' => 'PurchaseController',
-        'bonus' => 'BonusController', 'lostproducts' => 'LostProductController',
-        'saleitems' => 'SaleItemController', 'purchaseitems' => 'PurchaseItemController'
+        'products' => 'ProductController',
+        'providers' => 'ProviderController',
+        'employees' => 'EmployeeController',
+        'roles' => 'RoleController',
+        'sections' => 'SectionController',
+        'sales' => 'SaleController',
+        'purchases' => 'PurchaseController'
     );
 
     public function start(){

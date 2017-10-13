@@ -4,8 +4,8 @@
 			"product" : {
 				"name" : "Cebola roxa",
 				"description" : "Cebola roxa do Himalaia",
-				"purchaseprice" : "2.0",
-				"saleprice" : "3.0",
+				"purchaseprice" : 2.0,
+				"saleprice" : 3.0,
 				"measure" : "Quilo",
 				"section" : {
 					"name" : "Hortifruti",
@@ -27,8 +27,8 @@
 			"product" : {
 				"name" : "Cebola azul",
 				"description" : "Cebola azul do Triangulo das Bermudas",
-				"purchaseprice" : "2.5",
-				"saleprice" : "3.5",
+				"purchaseprice" : 2.5,
+				"saleprice" : 3.5,
 				"measure" : "Quilo",
 				"section" : {
 					"name" : "Hortifruti",
