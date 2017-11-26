@@ -10,7 +10,7 @@ class RequestValidator implements IRequestValidator {
     private $allowedProtocols = Array('HTTP/1.1');
     //lista de resources aceitos
     private $allowedUris = Array('products', 'providers', 'employees', 'users', 'roles', 'sections', 'sales',
-        'purchases', 'bonus', 'lostproducts', 'saleitems', 'purchaseitems');
+        'purchases', 'bonus', 'lostproducts', 'saleitems', 'purchaseitems', 'login');
     private $allowedOperations = Array("PUT" => Array("", "delete"), "GET" => Array(""), "POST" => Array(""));
     //Lista de atributos que devem vir no body. Se um dos atributos for outro objeto, vai estar como 'nome_do_resource' => 'nome_do_atributo_no_corpo', para saber que deve fazer a validaçao tb.
     private $bodyAttributes = Array(
@@ -43,7 +43,6 @@ class RequestValidator implements IRequestValidator {
         return true;
     }
 
-
     public function isMethodValid($method) {
         //Verifica se o método recebido está na lista de métodos aceitos. Se não estiver, retorna false.
         if (!in_array($method, $this->allowedMethods))
@@ -71,7 +70,6 @@ class RequestValidator implements IRequestValidator {
     }
 
 //*********************** Validação do Body *******************************************
-
 //    public function isBodyValid($resource, $operation, $body) {
 //        //Faz a validação de acordo com a operação a ser feita
 //        switch ($operation){
@@ -87,10 +85,10 @@ class RequestValidator implements IRequestValidator {
 //    }
 
     public function isBodyValid($resource, $operation, $body) {
-        if(!$this->isSetId($body, $operation))
+        if (!$this->isSetId($body, $operation))
             return false;
 
-        if($operation == 'register' || $operation == 'update')
+        if ($operation == 'register' || $operation == 'update')
             return $this->validateBodyAttributes($resource, $body);
 
         return true;
@@ -126,7 +124,7 @@ class RequestValidator implements IRequestValidator {
 
     //Verifica se está setado o _id no body. Só é necessário para update e delete
     private function isSetId($body, $operation) {
-        if (($operation == 'update' || $operation == 'delete') &&!isset($body["_id"]))
+        if (($operation == 'update' || $operation == 'delete') && !isset($body["_id"]))
             return false;
 
         return true;

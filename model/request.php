@@ -72,7 +72,6 @@ class Request {
     private function setUri($uri) {
         $cleanUri = explode('?', $uri); //Quebra a uri na '?' para separar da query string
         $arrayUri = explode('/', $cleanUri[0]); //Depois, quebra a uri na '/' para separar cada parte e joga na variável $arrayUri
-
         //Apenas para ajustar as posições do array caso os arquivos não estejam na raiz da pasta html ou htdocs. 
         //Essa parte não é necessária para o projeto
         if ($arrayUri[1] == "ProjetoDW") {
@@ -81,7 +80,7 @@ class Request {
         }
 
         if (!$this->rv->isUriValid($arrayUri, $this->method))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid URI");
 
         $this->uri = $arrayUri;
     }
@@ -105,25 +104,28 @@ class Request {
     private function setBody($body) {
         $bodyArray = json_decode($body, true);
         if (!$this->rv->isBodyValid($this->resource, $this->operation, $bodyArray))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid body request");
 
         if (isset($bodyArray['_id']))
             $bodyArray['_id'] = $this->treatId($bodyArray['_id']);
-        
+
         $this->body = $bodyArray;
     }
 
     private function setResource() {
-        $uri = $this->uri;
-        $this->resource = $uri[1];
+//        $uri = $this->uri;
+        $this->resource = $this->uri[1];
     }
 
     private function setOperation() {
         //Se veio alguma operação, joga na variável $uriOperation. Se não, deixa vazia
         $uriOperation = (!isset($this->uri[2])) ? "" : $this->uri[2];
 
+        if ($this->resource == 'login')
+            $this->operation = 'login';
+        else
         //A operação vai ser igual a o que estiver na $arraOperations na posição da junção do $method + / + $uriOperation
-        $this->operation = $this->arrayOperations[$this->method . '/' . $uriOperation];
+            $this->operation = $this->arrayOperations[$this->method . '/' . $uriOperation];
     }
 
     private function treatQueryString($qs) {
