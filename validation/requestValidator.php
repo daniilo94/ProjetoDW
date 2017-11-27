@@ -22,7 +22,8 @@ class RequestValidator implements IRequestValidator {
         'sections' => Array('name', 'description'),
         'sales' => Array('items' => 'saleitems', 'totalprice', 'formofpayment', 'employees' => 'cashier'),
         'purchases' => Array('totalprice', 'providers' => 'provider', 'items' => 'purchaseitems'),
-        'items' => Array('products' => 'product', 'quantity', 'totalvalue')
+        'items' => Array('products' => 'product', 'quantity', 'totalvalue'),
+        'login' => Array('email', 'password')
     );
 
     public function isUriValid($arrayUri, $method) {
@@ -88,7 +89,7 @@ class RequestValidator implements IRequestValidator {
         if (!$this->isSetId($body, $operation))
             return false;
 
-        if ($operation == 'register' || $operation == 'update')
+        if ($operation == 'register' || $operation == 'update' || $operation == 'login')
             return $this->validateBodyAttributes($resource, $body);
 
         return true;

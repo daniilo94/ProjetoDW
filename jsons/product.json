@@ -3,7 +3,7 @@
 	"description" : "Cebola roxa do Himalaia",
 	"purchaseprice" : "2.0",
 	"saleprice" : "3.0",
-	"measure" : "Quilo",
+	"measure" : "quilogramas",
 	"section" : {
 		"name" : "Hortifruti",
 		"description" : "Seção de frutas, verduras e legumes"

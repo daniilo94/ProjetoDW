@@ -10,10 +10,12 @@ class RequestTreater {
         'roles' => 'RoleController',
         'sections' => 'SectionController',
         'sales' => 'SaleController',
-        'purchases' => 'PurchaseController'
+        'purchases' => 'PurchaseController',
+        'login' => 'LoginController'
     );
 
     public function start(){
+        session_start();
         try {
             //Tenta criar uma nova request
             $request = new Request($_SERVER['REQUEST_METHOD'],
@@ -22,6 +24,9 @@ class RequestTreater {
                 $_SERVER['REQUEST_URI'],
                 $_SERVER['QUERY_STRING'],
                 file_get_contents('php://input'));
+            
+            if(!isset($_SESSION['user']) && $request->getResource() != 'login')
+                return json_encode(Array('code' => '401', 'message' => 'Unauthorized'));
 
             //Caso a request seja criada com sucesso, é criado um controller de acordo com o resource(entidade) que veio na request
             $controller = new $this->controllers[$request->getResource()]($request);

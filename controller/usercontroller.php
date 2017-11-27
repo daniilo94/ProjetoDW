@@ -19,7 +19,9 @@ class UserController {
         $body = $this->request->getBody();
         $collection = $this->request->getResource();
         try {
+            $body['password'] = md5($body['password']);
             new User($body['employee'], $body['usertype'], $body['password']);
+            var_dump($body);
             (new DBHandler())->insert($body, $collection);
 
             return json_encode(Array('code' => '200', 'message' => 'Ok'));
