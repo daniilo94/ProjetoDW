@@ -121,8 +121,8 @@ class Request {
         //Se veio alguma operação, joga na variável $uriOperation. Se não, deixa vazia
         $uriOperation = (!isset($this->uri[2])) ? "" : $this->uri[2];
 
-        if ($this->resource == 'login')
-            $this->operation = 'login';
+        if ($this->resource == 'login' || $this->resource == 'logout')
+            $this->operation = $this->resource;
         else
         //A operação vai ser igual a o que estiver na $arraOperations na posição da junção do $method + / + $uriOperation
             $this->operation = $this->arrayOperations[$this->method . '/' . $uriOperation];

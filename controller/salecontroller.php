@@ -3,6 +3,12 @@
 class SaleController {
 
     private $request;
+    private $permissions = Array(
+        'search' => ['admin', 'normal'],
+        'register' => ['admin', 'normal'],
+        'update' => ['admin'],
+        'delete' => ['admin'],
+    );
 
     public function __construct($request) {
         $this->request = $request;
@@ -11,6 +17,9 @@ class SaleController {
     public function routeOperation() {
         //Pegar da request qual operação deve ser feita
         $operation = $this->request->getOperation();
+        if (!$this->verifyPermission($operation))
+            return json_encode(Array('code' => '401', 'message' => 'Unauthorized'));
+        else
         //Chamar a operação
         return $this->$operation();
     }
@@ -60,6 +69,15 @@ class SaleController {
         if ($result->getModifiedCount() == 0)
             throw new RequestException('404', 'Object not found');
         return json_encode(Array('code' => '200', 'message' => 'Ok'));
+    }
+    
+    private function verifyPermission($operation) {
+        session_start();
+        if (isset($_SESSION['user'])) {
+            if (in_array($_SESSION['user']->usertype, $this->permissions[$operation]))
+                return true;
+        }
+        return false;
     }
 
 }

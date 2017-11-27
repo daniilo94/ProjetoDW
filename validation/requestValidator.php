@@ -10,7 +10,7 @@ class RequestValidator implements IRequestValidator {
     private $allowedProtocols = Array('HTTP/1.1');
     //lista de resources aceitos
     private $allowedUris = Array('products', 'providers', 'employees', 'users', 'roles', 'sections', 'sales',
-        'purchases', 'bonus', 'lostproducts', 'saleitems', 'purchaseitems', 'login');
+        'purchases', 'bonus', 'lostproducts', 'saleitems', 'purchaseitems', 'login', 'logout');
     private $allowedOperations = Array("PUT" => Array("", "delete"), "GET" => Array(""), "POST" => Array(""));
     //Lista de atributos que devem vir no body. Se um dos atributos for outro objeto, vai estar como 'nome_do_resource' => 'nome_do_atributo_no_corpo', para saber que deve fazer a validaçao tb.
     private $bodyAttributes = Array(
