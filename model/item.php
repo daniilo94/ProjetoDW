@@ -36,7 +36,7 @@ class Item {
 
     private function setQuantity($quantity) {
         if (!$this->iv->isQuantityValid($quantity))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid quantity");
 
         $this->quantity = $quantity;
     }
@@ -45,7 +45,7 @@ class Item {
         $price = ($this->itemType == 'purchase') ? $this->product->getPurchasePrice() : $this->product->getSalePrice();
         
         if (!$this->iv->isTotalValueValid($totalValue, $this->quantity, $price))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid total value");
 
         $this->totalValue = $totalValue;
     }

@@ -46,7 +46,7 @@ class Purchase {
 
     private function setTotalPrice($totalPrice) {
         if (!$this->pv->isTotalPriceValid($totalPrice, $this->purchaseItems))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid price");
 
         $this->totalPrice = $totalPrice;
     }

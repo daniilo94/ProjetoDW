@@ -41,7 +41,7 @@ class Sale {
 
     private function setFormOfPayment($formOfPayment) {
         if (!$this->sv->isFormOfPaymentValid($formOfPayment))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid form of payment");
 
         $this->formOfPayment = $formOfPayment;
     }
@@ -63,7 +63,7 @@ class Sale {
 
     private function setTotalPrice($totalPrice) {
         if (!$this->sv->isTotalPriceValid($totalPrice, $this->saleItems))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid price");
 
         $this->totalPrice = $totalPrice;
     }

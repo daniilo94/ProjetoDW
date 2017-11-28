@@ -35,7 +35,7 @@ class ProductValidator implements IProductValidator {
     }
 
     public function isMeasureValid($measure) {
-        if ($measure != "Quilo" && $measure != "Unidade" && $measure != "Litro") {
+        if ($measure != "quilograma" && $measure != "unidade" && $measure != "litro") {
             return false;
         }
 

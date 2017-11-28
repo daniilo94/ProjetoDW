@@ -30,7 +30,7 @@ class User {
 
     public function setUserType($userType) {
         if (!$this->uv->isUserTypeValid($userType))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid user type");
 
         $this->userType = $userType;
     }
@@ -41,7 +41,7 @@ class User {
 
     public function setPassword($password) {
         if (!$this->uv->isPasswordValid($password))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid password");
 
         $this->password = $password;
     }

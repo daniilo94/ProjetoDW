@@ -1,6 +1,6 @@
 <?php
 
-$folders = Array('controller', 'database', 'exception', 'model', 'treater', 'validation', 'util');
+$folders = Array('controller', 'database', 'exception', 'model', 'treater', 'validation', 'util', 'test');
 
 foreach ($folders as $folder) {
     foreach (glob("$folder/*.php") as $filename) {

@@ -41,32 +41,32 @@ class Provider {
 
     public function setName($name) {
         if (!$this->pv->isNameValid($name))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid name");
         $this->name = $name;
     }
 
     public function setCnpj($cnpj) {
         if (!$this->pv->isCnpjValid($cnpj))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid cnpj");
         $this->cnpj = $cnpj;
     }
 
     public function setPhones($phones) {
             if (!$this->pv->isPhonesValid($phones))
-                throw new RequestException("400", "Bad request");
+                throw new RequestException("400", "Invalid phone");
             
         $this->phones = $phones;
     }
 
     public function setEmail($email) {
         if (!$this->pv->isEmailValid($email))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid email");
         $this->email = $email;
     }
 
     public function setDescription($description) {
         if (!$this->pv->isDescriptionValid($description))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid description");
         $this->description = $description;
     }
 

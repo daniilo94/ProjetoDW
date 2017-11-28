@@ -17,9 +17,9 @@ class UserController {
     public function routeOperation() {
         //Pegar da request qual operação deve ser feita
         $operation = $this->request->getOperation();
-        if (!$this->verifyPermission($operation))
-            return json_encode(Array('code' => '401', 'message' => 'Unauthorized'));
-        else
+//        if (!$this->verifyPermission($operation))
+//            return json_encode(Array('code' => '401', 'message' => 'Unauthorized'));
+//        else
         //Chamar a operação
         return $this->$operation();
     }
@@ -30,7 +30,6 @@ class UserController {
         try {
             $body['password'] = md5($body['password']);
             new User($body['employee'], $body['usertype'], $body['password']);
-            var_dump($body);
             (new DBHandler())->insert($body, $collection);
 
             return json_encode(Array('code' => '200', 'message' => 'Ok'));

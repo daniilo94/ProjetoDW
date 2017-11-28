@@ -19,7 +19,7 @@ class Section {
 
     public function setName($name) {
         if (!$this->sv->isNameValid($name))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid name");
 
         $this->name = $name;
     }
@@ -30,7 +30,7 @@ class Section {
 
     public function setDescription($description) {
         if (!$this->sv->isDescriptionValid($description))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid description");
 
         $this->description = $description;
     }

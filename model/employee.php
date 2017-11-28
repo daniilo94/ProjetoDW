@@ -27,7 +27,7 @@ class Employee {
 
     public function setName($name) {
         if (!$this->ev->isNameValid($name))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid name");
         
         $this->name = $name;
     }
@@ -38,7 +38,7 @@ class Employee {
 
     public function setCpf($cpf) {
         if (!$this->ev->isCpfValid($cpf))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid CPF");
         
         $this->cpf = $cpf;
     }
@@ -49,7 +49,7 @@ class Employee {
 
     public function setPhones($phones) {
         if (!$this->ev->isPhonesValid($phones))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid phone");
         
         $this->phones = $phones;
     }
@@ -60,7 +60,7 @@ class Employee {
 
     public function setEmail($email) {
         if (!$this->ev->isEmailValid($email))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid email");
         
         $this->email = $email;
     }
@@ -71,7 +71,7 @@ class Employee {
 
     public function setBirthdate($birthdate) {
         if (!$this->ev->isBirthdateValid($birthdate))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid birthdate");
         
         $this->birthdate = $birthdate;
     }

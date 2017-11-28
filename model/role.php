@@ -21,7 +21,7 @@ class Role {
 
     public function setName($name) {
         if (!$this->rv->isNameValid($name))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid name");
         $this->name = $name;
     }
 
@@ -31,7 +31,7 @@ class Role {
 
     public function setDescription($description) {
         if (!$this->rv->isDescriptionValid($description))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid description");
         $this->description = $description;
     }
 
@@ -41,7 +41,7 @@ class Role {
 
     public function setSalary($salary) {
         if (!$this->rv->isSalaryValid($salary))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid salary");
         $this->salary = $salary;
     }
 

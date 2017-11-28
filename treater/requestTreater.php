@@ -12,7 +12,8 @@ class RequestTreater {
         'sales' => 'SaleController',
         'purchases' => 'PurchaseController',
         'login' => 'LoginController',
-        'logout' => 'LoginController'
+        'logout' => 'LoginController',
+        'test' => 'TestController'
     );
 
     public function start() {

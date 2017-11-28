@@ -31,7 +31,7 @@ class Product {
 
     public function setName($name) {
         if (!$this->pv->isNameValid($name))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid name");
 
         $this->name = $name;
     }
@@ -42,7 +42,7 @@ class Product {
 
     public function setDescription($description) {
         if (!$this->pv->isDescriptionValid($description))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid description");
 
         $this->description = $description;
     }
@@ -53,7 +53,7 @@ class Product {
 
     public function setPurchasePrice($purchasePrice) {
         if (!$this->pv->isPurchasePriceValid($purchasePrice))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid price");
 
         $this->purchasePrice = $purchasePrice;
     }
@@ -64,7 +64,7 @@ class Product {
 
     public function setSalePrice($salePrice) {
         if (!$this->pv->isSalePriceValid($salePrice))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid price");
 
         $this->salePrice = $salePrice;
     }
@@ -75,7 +75,7 @@ class Product {
 
     public function setMeasure($measure) {
         if (!$this->pv->isMeasureValid($measure))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid measure");
 
         $this->measure = $measure;
     }
@@ -103,7 +103,7 @@ class Product {
 
     public function setCurrentStock($currentStock) {
         if (!$this->pv->isCurrentStockValid($currentStock))
-            throw new RequestException("400", "Bad request");
+            throw new RequestException("400", "Invalid stock");
 
         $this->currentStock = $currentStock;
     }

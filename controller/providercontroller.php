@@ -17,9 +17,9 @@ class ProviderController {
     public function routeOperation() {
         //Pegar da request qual operação deve ser feita
         $operation = $this->request->getOperation();
-        if (!$this->verifyPermission($operation))
-            return json_encode(Array('code' => '401', 'message' => 'Unauthorized'));
-        else
+//        if (!$this->verifyPermission($operation))
+//            return json_encode(Array('code' => '401', 'message' => 'Unauthorized'));
+//        else
         //Chamar a operação
         return $this->$operation();
     }
@@ -30,7 +30,7 @@ class ProviderController {
         try {
             new Provider($body['name'], $body['cnpj'], $body['phones'], $body['email'], $body['description']);
             (new DBHandler())->insert($body, $collection);
-
+            
             return json_encode(Array('code' => '200', 'message' => 'Ok'));
         } catch (RequestException $ue) {
             return $ue->toJson();
